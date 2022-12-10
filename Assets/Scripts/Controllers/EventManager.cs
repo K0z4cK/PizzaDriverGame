@@ -7,7 +7,7 @@ public class EventManager : SingletonComponent<EventManager>
     public delegate void SpeedChanged(float speed);
     public event SpeedChanged speedChanged;
 
-    public void onSpeedChanged(float speed)
+    public void OnSpeedChanged(float speed)
     {
          speedChanged?.Invoke(speed);
     }

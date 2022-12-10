@@ -15,17 +15,17 @@ public class GameManager : SingletonComponent<GameManager>
 
     public void onTouchBeganUser(Vector3 position)
     {
-         Debug.Log("Touch begin");
+        //Debug.Log("Touch begin");
         TouchBeganUser?.Invoke(position);
     }
     public void onTouchMovedUser(Vector3 position)
     {
-        Debug.Log("Touch Move");
+        //Debug.Log("Touch Move");
         TouchMovedUser?.Invoke(position);
     }
     public void onTouchEndedUser()
     {
-        Debug.Log("Touch End");
+        //Debug.Log("Touch End");
         TouchEndedUser?.Invoke();
     }
 }
