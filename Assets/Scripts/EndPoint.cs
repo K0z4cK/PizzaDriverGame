@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EndPoint : MonoBehaviour
@@ -15,7 +13,7 @@ public class EndPoint : MonoBehaviour
     {
         if(other.tag == "Car")
         {
-            _carRoadScript.ResetCar(other.transform);
+            _carRoadScript.ResetCar();
         }
     }
 }

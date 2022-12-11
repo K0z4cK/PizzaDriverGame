@@ -10,17 +10,20 @@ public class CarRoad : MonoBehaviour
     private Collider _startPoint;
     [SerializeField]
     private Collider _endPoint;
-    [SerializeField]
+
     private Queue<Transform> _carsPool;
 
     private int _poolSize;
 
     private int _direction;
 
+    private bool _isApplicationEnd = false; //костиль, не придумав як прибрати ерори які викликаються при завершенні гри
+
     private void Awake()
     {
+
         _carsPool = new Queue<Transform>();
-        _poolSize = 10; 
+        _poolSize = 5; 
         _direction = (Random.Range(0, 10) >= 5) ? 1 : -1;
         _startPoint.transform.localPosition = new Vector3(this.transform.localScale.x/2 * _direction, _startPoint.transform.position.y, _startPoint.transform.position.z);
         _endPoint.transform.localPosition = new Vector3(this.transform.localScale.x / 2 * -_direction, _endPoint.transform.position.y, _endPoint.transform.position.z);
@@ -32,25 +35,47 @@ public class CarRoad : MonoBehaviour
             DeactivateCar(newCar);
         } while (_carsPool.Count != _poolSize);
 
-        StartCoroutine(StartTrafficCoroutine());
     }
 
     private void DeactivateCar(Transform car)
     {
         car.gameObject.SetActive(false);
     }
-    public void ResetCar(Transform car)
+    public void ResetCar()
     {
-        car.position = _startPoint.transform.position;
+        _carsPool.Peek().position = _startPoint.transform.position;
+        _carsPool.Peek().gameObject.SetActive(true);
+        _carsPool.Enqueue(_carsPool.Dequeue());
     }
     private IEnumerator StartTrafficCoroutine()
     {
         for (int i = 0; i < _carsPool.Count; i++)
         {
-            _carsPool.Peek().gameObject.SetActive(true);
-            _carsPool.Enqueue(_carsPool.Peek());
-            _carsPool.Dequeue();
-            yield return new WaitForSeconds(2f); 
+            ResetCar();
+            yield return new WaitForSeconds(1f);
+
         }
+    }
+
+    private void OnDisable()
+    {
+        if (_isApplicationEnd)
+            return;
+
+        foreach (var car in _carsPool)
+        {          
+            if(car != null) //При виході з гри давало помилку про те що елемент зруйнований
+                DeactivateCar(car);
+        }
+        EventManager.Instance.OnCarRoadDisabled();
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(StartTrafficCoroutine());
+    }
+    private void OnApplicationQuit()
+    {
+        _isApplicationEnd = true;
     }
 }

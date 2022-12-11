@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380269572d079ea4c9b9232ace91d841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carRoadScript: {fileID: 0}
+  _carRoadScript: {fileID: 1959970864054427210}
 --- !u!1 &1959970863764043004
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,13 +115,14 @@ GameObject:
   - component: {fileID: 1959970864054427208}
   - component: {fileID: 1959970864054427211}
   - component: {fileID: 1959970864054427210}
+  - component: {fileID: -8327243174674165463}
   m_Layer: 0
   m_Name: CarRoad
-  m_TagString: Untagged
+  m_TagString: Car Road
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1959970864054427214
 Transform:
   m_ObjectHideFlags: 0
@@ -216,3 +217,19 @@ MonoBehaviour:
   _carPrefab: {fileID: 6325367814188977125, guid: 7a970b2b2be9ba14e8779410287dcc4e, type: 3}
   _startPoint: {fileID: 1959970863764043005}
   _endPoint: {fileID: 1959970863539702800}
+--- !u!54 &-8327243174674165463
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959970864054427205}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
