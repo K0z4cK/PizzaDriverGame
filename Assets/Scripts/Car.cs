@@ -33,13 +33,10 @@ public class Car : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //Game Over
         if (collision.gameObject.tag == "Player")
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-         Application.Quit();
-#endif
+            EventManager.Instance.OnGameLose();
         }
 
     }

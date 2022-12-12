@@ -21,6 +21,8 @@ public class CarRoad : MonoBehaviour
 
     private void Awake()
     {
+        EventManager.Instance.gameLosed += OnApplicationQuit;
+        EventManager.Instance.gameWined += OnApplicationQuit;
 
         _carsPool = new Queue<Transform>();
         _poolSize = 5; 
@@ -32,14 +34,15 @@ public class CarRoad : MonoBehaviour
             var newCar = Instantiate(_carPrefab, _startPoint.transform.position, _carPrefab.rotation);
             _carsPool.Enqueue(newCar);
             newCar.GetComponent<Car>().SetDirection(_direction);
-            DeactivateCar(newCar);
+            DeactivateCar();
         } while (_carsPool.Count != _poolSize);
 
     }
 
-    private void DeactivateCar(Transform car)
+    private void DeactivateCar()
     {
-        car.gameObject.SetActive(false);
+        _carsPool.Peek().gameObject.SetActive(false);
+        _carsPool.Enqueue(_carsPool.Dequeue());
     }
     public void ResetCar()
     {
@@ -61,13 +64,11 @@ public class CarRoad : MonoBehaviour
     {
         if (_isApplicationEnd)
             return;
-
-        foreach (var car in _carsPool)
-        {          
-            if(car != null) //При виході з гри давало помилку про те що елемент зруйнований
-                DeactivateCar(car);
+        StopCoroutine(StartTrafficCoroutine());
+        for (int i = 0; i < _carsPool.Count; i++)
+        {
+            DeactivateCar();
         }
-        EventManager.Instance.OnCarRoadDisabled();
     }
 
     private void OnEnable()

@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour
     private MeshCollider _carRoadSpawPoint;
 
     [SerializeField]
-    private int _carRoadPoolSize = 3;
+    private int _carRoadPoolSize = 2;
     [SerializeField]
     private int _environmentPoolSize = 10;
 
@@ -27,9 +27,12 @@ public class Spawner : MonoBehaviour
 
     private float _spawnX, _spawnZ;
 
+    private bool _isSpawning = true;
+
 
     private void Awake()
     {
+        EventManager.Instance.stopSpawning += () => _isSpawning = false;
         EventManager.Instance.carRoadDisabled += ResetCarRoad;
         _environmentPool = new Queue<Transform>();
         do
@@ -44,11 +47,12 @@ public class Spawner : MonoBehaviour
         {
             var newCarRoad = Instantiate(_carRoadPrefab, this.transform.position, _carRoadPrefab.rotation);
             _carRoadsPool.Enqueue(newCarRoad);
-        } while (_carRoadsPool.Count != _carRoadPoolSize);     
+        } while (_carRoadsPool.Count != _carRoadPoolSize);
         StartCoroutine(SpawnCoroutine());
     }
     private void SpawnCarRoad()
     {
+        _carRoadsPool.Peek().gameObject.SetActive(false);
         _carRoadsPool.Peek().position = _carRoadSpawPoint.gameObject.transform.position;
         _carRoadsPool.Peek().gameObject.SetActive(true);
         _carRoadsPool.Enqueue(_carRoadsPool.Dequeue());
@@ -63,16 +67,19 @@ public class Spawner : MonoBehaviour
     }
     private void ResetCarRoad()
     {
-        SpawnEnvironment(_leftSpawpArea);
-        SpawnEnvironment(_rightSpawpArea);
-        SpawnCarRoad();
+        if (_isSpawning)
+        {
+            SpawnEnvironment(_leftSpawpArea);
+            SpawnEnvironment(_rightSpawpArea);
+            SpawnCarRoad();
+        }
     }
     private IEnumerator SpawnCoroutine()
     {
-        do
+        for(int i = 0;i < _carRoadsPool.Count; i++)
         {
             ResetCarRoad();
             yield return new WaitForSeconds(5f);
-        }while (true);
+        }
     }
 }

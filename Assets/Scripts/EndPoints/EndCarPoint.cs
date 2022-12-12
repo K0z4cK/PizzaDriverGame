@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EndPoint : MonoBehaviour
+public class EndCarPoint : MonoBehaviour
 {
     [SerializeField]
     private CarRoad _carRoadScript;
